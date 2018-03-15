@@ -89,6 +89,15 @@ if ( $grade && $key_id && $CONTEXT->id && $LINK->id && $RESULT->id ) {
 
 $form_id = "tsugi_form_id_".bin2Hex(openssl_random_pseudo_bytes(4));
 $parms['ext_lti_form_id'] = $form_id;
+$parms['ext_sakai_eid'] = $_SESSION['lti_post']['user_id'];
+$parms['user_id'] = $_SESSION['lti_post']['ext_sakai_eid'];
+$parms['roles'] = '';
+
+if ($LAUNCH->user->instructor) {
+    $parms['roles'] = 'Instructor,urn:lti:instrole:ims/lis/Administrator';
+}
+
+//var_dump($parms);
 
 $parms = LTI::signParameters($parms, $url, "POST", $key, $secret,
      __("Finish Launch"), $CFG->product_instance_guid, $CFG->servicename);
